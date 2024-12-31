@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Galaxy Solusindo - Order Management">
+    <title>Galaxy Solusindo (Gasol) | Toko Komputer Malang dan Surabaya</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/logogasol.png') }}" type="image/x-icon">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/all-css-libraries.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  </head>
+  <body>
+    <!-- Modal -->
+    {% include 'modal.html' %}
+    <!-- Preloader-->
+    <div class="preloader" id="preloader">
+      <div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>
+    </div>
+    <!-- Header Wrapper -->
+    <header class="header-area dashboard-header px-0 px-sm-0">
+      <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+          <div class="d-flex align-items-center">
+            <!-- Brand Logo -->
+            <div class="navbar-brand me-2">
+              <img class="light-logo" src="{{ url_for('static', filename='img/gasol-img-light.png') }}" style="height: 50px">
+              <img class="dark-logo" src="{{ url_for('static', filename='img/gasol-img-dark.png') }}" style="height: 50px">
+            </div>
+          </div>
+          <!-- Header Meta -->
+          <div class="header-meta d-flex align-items-center">
+            <!-- Menu Toggler -->
+            <div class="menu-toggler ms-2 ms-sm-3" id="dashboardMenuTrigger"><i class="bi bi-list"></i></div>
+            <!-- Button --><a class="btn btn-sm btn-danger rounded-pill ms-2 ms-sm-3 d-none d-sm-block" href="{{url_for('home')}}"><i></i>Back</a>
+          </div>
+        </div>
+      </nav>
+    </header>
+        <!-- Admin Sidebar Wrap -->
+        <div class="admin-sidebar-wrap">
+          <div class="overflowY-scroll">
+            <!-- User Profile -->
+            <div class="user-profile">
+              <!-- User Name -->
+              {% if session.get('role') != 'customer' %}
+              <div class="user-name mb-5">
+                <div class="d-flex align-items-center"><img src="{{ url_for('static', filename='img/bg-img/u2.jpg') }}" class="img-thumbnail rounded-pill">
+                  <div class="ms-3">
+                    <h6 class="lh-1 text-dark fz-18">
+                      {{ session.get('username', '') }}
+                  </h6>
+                  {% if session.get('role') == 'owner'%}
+                  <span class="badge bg-primary fz-12">Owner</span>
+                  {% elif session.get('role') == 'admin'%}
+                  <span class="badge bg-primary fz-12">Admin</span>
+                  {% elif session.get('role') == 'employee'%}
+                  <span class="badge bg-primary fz-12">Employee</span>
+                  {% endif %}
+                  </div>
+                </div>
+              </div>
+              {% else %}
+              <div class="user-name mb-5">
+                <div class="d-flex align-items-center"><img src="{{ url_for('static', filename='uploads/profile_pictures/' + session['profile_picture']) }}" class="img-thumbnail rounded-pill" style="height: 65px; width: 70px;">
+                  <div class="ms-3">
+                    <h6 class="lh-1 text-dark fz-18">
+                      {{ session.get('username', '') }}
+                  </h6>
+                  <span class="badge bg-primary fz-12">User</span>
+                  </div>
+                </div>
+              </div>
+              {% endif %}
+            </div>
+            <!-- Sidenav -->
+            <div class="sidenav">
+              <ul>
+               {% if session.get('role') != 'customer'%}
+               <li>Menu</li>
+                {% if session.get('role') == 'owner'%}
+                <li><a href="{{url_for('admin')}}"><i class="bi bi-speedometer"></i>Dashboard</a></li>
+                {% endif %}
+               <li><a href="{{url_for('add_product_form')}}"><i class="bi bi-plus-square"></i>Add Product</a></li>
+               <li><a href="{{ url_for('manage_products', page=1, category=0, query='') }}"><i class="bi bi-list-task"></i>List Product</a></li>
+                {% if session.get('role') == 'owner' or session.get('role') == 'admin'%}
+                <li><a class="active" href="{{ url_for('order_data', page=1) }}"><i class="bi bi-clipboard-data-fill"></i>Ordered Data</a></li>
+                {% endif %}
+               <li><a href="{{ url_for('logout') }}"><i class="bi bi-box-arrow-right"></i>Logout</a></li>
+               {% else %}
+               <li>Menu</li>
+               <li><a class="active" href="{{url_for('transaction_history')}}"><i class="bi bi-clock-history"></i>Transaction History</a></li>
+               <li><a href="{{ url_for('settings') }}"><i class="bi bi-gear"></i>Settings</a></li>
+               <li><a href="{{ url_for('logout') }}"><i class="bi bi-box-arrow-right"></i>Logout</a></li>
+               {% endif %}
+              </ul>
+            </div>
+            <div class="mt-auto">
+              <div class="mt-5"></div>
+              <!-- Mode Switching -->
+              <div class="dark-light-mode">
+                <input id="darkLightSwitch" type="checkbox">
+                <label class="shadow" for="darkLightSwitch">Toggle</label>
+              </div>
+              <div class="copywrite-text mt-4">
+                <p class="mb-0 fz-14">2024 &copy; All rights reserved by <a class="fz-14" target="_blank">Lienka</a></p>
+              </div>
+            </div>
+          </div>
+        </div>
+    <!-- Main Content -->
+    <div class="container admin-wrapper">
+      <h3 class="text-center mb-4">Order Detail</h3>
+      
+<!-- Order Information -->
+<div class="order-info mb-5" style="display: flex; justify-content: space-between; align-items: flex-start;">
+  <!-- Left Column: Order Details -->
+  <div style="flex: 1; margin-left: 50px;">
+      <p><strong>Order ID:</strong> {{ order_info.order_id }}</p>
+      {% if session.get('role') == 'customer' %}
+      <p><strong>Name:</strong> {{ order_info.customer_name }}</p>
+      {% else %}
+      <p><strong>Customer Name:</strong> {{ order_info.customer_name }}</p>
+      {% endif %}
+      <p><strong>Phone Number:</strong> {{ order_info.phone }}</p>
+      <p><strong>Address:</strong> {{ order_info.address }}, {{ order_info.postal_code }}, {{ order_info.city }}, {{ order_info.province_name }}</p>
+      <p><strong>Total Price:</strong> {{ order_info.total_price | rupiah }}</p>
+      <p><strong>Payment Method:</strong> {{ order_info.payment_method }}</p>
+      <p><strong>Order Date:</strong> {{ order_info.created_at }}</p>
+      <p><strong>Status:</strong> {{ order_info.status_order }}</p>
+  </div>
+
+  <!-- Right Column: Transfer Proof -->
+  {% if order_info.payment_method == 'bank_transfer' %}
+    <div style="flex: 0 0 150px; text-align: center; margin-right: 50px;">
+      {% if order_info.transfer_proof %}
+        <p><strong>Transfer Proof:</strong></p>
+        <a href="{{ url_for('static', filename='uploads/transfer_proof/' + order_info.transfer_proof) }}" download>
+          <img src="{{ url_for('static', filename='uploads/transfer_proof/' + order_info.transfer_proof) }}" alt="Transfer Proof" 
+          style="max-width: 100%; border: 1px solid #ddd; border-radius: 8px;">
+        </a>
+      {% else %}
+        <p><strong>Transfer Proof:</strong> Not available</p>
+      {% endif %}
+    </div>
+  {% endif %}
+</div>
+
+<!-- Order Items -->
+<div class="table-responsive border shadow-sm activity-table mb-70">
+  <table class="table mb-0">
+    <thead>
+      <tr>
+        <th scope="col" class="text-center">Product Name</th>
+        <th scope="col" class="text-center">Quantity</th>
+        <th scope="col" class="text-center">Price per Unit</th>
+        <th scope="col" class="text-center">Total Price</th>
+        {% if session.get('role') == 'customer' and order_info.status_order == 'completed' %}
+        <th scope="col" class="text-center">Action</th>
+        {% endif %}
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Looping for Order Items -->
+      {% for item in order_items %}
+        <tr>
+          <td class="text-center">{{ item.product_name }}</td>
+          <td class="text-center">{{ item.quantity }}</td>
+          <td class="text-center">{{ item.price | rupiah }}</td>
+          <td class="text-center">{{ item.subtotal | rupiah }}</td>
+          {% if session.get('role') == 'customer' and order_info.status_order == 'completed' %}
+          <td class="text-center">
+              {% if item.review_status == 'done' %}
+                <span class="text-success">Sudah di-review</span>
+              {% else %}
+                <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#reviewModal{{ item.product_id }}-{{ item.order_item_id }}">
+                  Review
+                </button>
+              {% endif %}
+          </td>
+          {% endif %}
+        </tr>
+        <!-- Modal for Product Review -->
+        <div class="modal fade" id="reviewModal{{ item.product_id }}-{{ item.order_item_id }}" tabindex="-1" aria-labelledby="reviewModalLabel{{ item.product_id }}-{{ item.order_item_id }}" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="reviewModalLabel{{ item.product_id }}-{{ item.order_item_id }}">Review Produk</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <form action="{{ url_for('review_product', order_id=order_info.order_id, product_id=item.product_id, order_item_id=item.order_item_id) }}" method="POST">
+                <div class="modal-body">
+                  <div class="mb-3">
+                    <label for="review" class="form-label">Ulasan</label>
+                    <textarea class="form-control" id="review" name="review" rows="3" required></textarea>
+                  </div>
+                  <div class="mb-3">
+                    <label for="rating" class="form-label">Rating</label>
+                    <select class="form-select" id="rating" name="rating" required>
+                      <option value="" disabled selected>Pilih rating</option>
+                      <option value="1">1 - Sangat Buruk</option>
+                      <option value="2">2 - Buruk</option>
+                      <option value="3">3 - Cukup</option>
+                      <option value="4">4 - Baik</option>
+                      <option value="5">5 - Sangat Baik</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                  <button type="submit" class="btn btn-primary">Kirim</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+    </div>
+    
+    <div class="divider"></div>
+    
+    <!-- Scroll To Top -->
+    <div id="scrollTopButton"><i class="bi bi-arrow-up-short"></i></div>
+
+    <!-- All JavaScript Files-->
+    <script src="{{ url_for('static', filename='js/all-js-libraries.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/active.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+  </body>
+</html>

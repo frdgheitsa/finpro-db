@@ -1,0 +1,110 @@
+                    <form action="{{ url_for('explore_all') }}" method="GET">
+                        <div class="input-group w-100 mb-5">
+                            <input 
+                                type="search" 
+                                name="query" 
+                                class="form-control" 
+                                placeholder="Search products..." 
+                                value="{{ search_query }}">
+                        </div>
+                        <h5 class="mb-1">Categories</h5>
+                        <select name="category" class="filter-select bg-gray w-100" onchange="this.form.submit()">
+                            <option value="0" {% if selected_category == 0 %}selected{% endif %}>All</option>
+                            {% for category in categories %}
+                            <option value="{{ category['category_id'] }}" 
+                                    {% if category['category_id'] == selected_category %}selected{% endif %}>
+                                {{ category['category_name'] }}
+                            </option>
+                            {% endfor %}
+                        </select> 
+                        <h5>Sort By</h5>
+                        <select name="sort" class="filter-select bg-gray w-100 mb-4">
+                            <option value="1" selected>Recently Added</option>
+                            <option value="2">Recently Sold</option>
+                            <option value="3">Ending Soon</option>
+                        </select>
+                
+                        <h5>Price</h5>
+                        <input id="filterRange" type="text" name="price" value="" data-min="100" data-max="1000" data-from="300"
+                            data-to="750" data-type="double" data-prefix="" data-grid="false">
+                
+                        <div class="mb-4"></div>
+                
+                        <h5>Ratings</h5>
+                        <select name="rating" class="filter-select bg-gray w-100 mb-4">
+                            <option value="1" selected>5 Star</option>
+                            <option value="2">4 Star & Above</option>
+                            <option value="3">3 Star & Above</option>
+                            <option value="4">2 Star & Above</option>
+                            <option value="5">1 Star & Above</option>
+                        </select>
+                
+                        <button class="btn btn-primary rounded-pill w-100" type="submit">Apply<i class="ms-1 bi bi-arrow-right"></i></button>
+                    </form>
+
+@app.route('/explore_all', methods=['GET'])
+def explore_all():
+    connection = get_db_connection()
+    cursor = connection.cursor(dictionary=True)
+
+    # Ambil parameter dari URL
+    search_query = request.args.get('query', '', type=str)  # Query pencarian
+    selected_category = request.args.get('category', 0, type=int)
+    per_page = 12  # Produk per halaman
+    page = request.args.get('page', 1, type=int)
+    offset = (page - 1) * per_page
+
+    # Query dasar untuk produk
+    query = '''
+    SELECT p.product_id, p.name, p.image, p.price_sell, p.stock, p.category_id, c.category_name
+    FROM Products p
+    LEFT JOIN Categories c ON p.category_id = c.category_id
+    WHERE p.name LIKE %s AND p.stock > 0
+    '''
+    params = [f"%{search_query}%"]
+
+    # Filter berdasarkan kategori jika ada
+    if selected_category and selected_category != 0:
+        query += " AND p.category_id = %s"
+        params.append(selected_category)
+
+    # Tambahkan paginasi
+    query += " LIMIT %s OFFSET %s"
+    params.extend([per_page, offset])
+
+    # Jalankan query produk
+    cursor.execute(query, tuple(params))
+    products = cursor.fetchall()
+
+    # Query untuk menghitung total produk
+    count_query = '''
+    SELECT COUNT(*) AS total 
+    FROM Products p
+    WHERE p.name LIKE %s
+    '''
+    count_params = [f"%{search_query}%"]
+
+    if selected_category and selected_category != 0:
+        count_query += " AND p.category_id = %s"
+        count_params.append(selected_category)
+
+    cursor.execute(count_query, tuple(count_params))
+    total_products = cursor.fetchone()['total']
+    total_pages = math.ceil(total_products / per_page)
+
+    # Ambil semua kategori untuk dropdown
+    cursor.execute("SELECT category_id, category_name FROM Categories")
+    categories = cursor.fetchall()
+
+    cursor.close()
+    connection.close()
+
+    return render_template(
+        'explore_all.html',
+        products=products,
+        categories=categories,
+        search_query=search_query,
+        selected_category=selected_category,
+        page=page,
+        total_pages=total_pages
+    )

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description">
+    <!-- Title-->
+    <title>Galaxy Solusindo (Gasol) | Toko Komputer Malang dan Surabaya</title>
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/logogasol.png') }}" type="image/x-icon">
+    <!-- All CSS Stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/all-css-libraries.css') }}">
+    <!-- Core Stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  </head>
+  <body>
+    <!-- Modal -->
+    {% include 'modal.html' %}
+    <!-- Preloader-->
+    <div class="preloader" id="preloader">
+      <div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>
+    </div>
+    <!-- Header Area-->
+    {% include 'navbar.html' %}
+    <!-- Breadcrumb -->
+    <div class="breadcrumb-wrapper">
+      <div class="container">
+        <div class="breadcrumb-content">
+          <h2 class="breadcrumb-title">Your Cart</h2>
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb justify-content-center">
+              <li class="breadcrumb-item"><a href="{{ url_for('home') }}">Home</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Cart</li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="collection-wrapper">
+      <div class="container">
+        <div class="row">
+          <h4 class="mb-4">Your Cart Items</h4>
+    
+          {% if products %}
+          <div class="col-12">
+            <div class="table-responsive border shadow-sm activity-table mb-70">
+              <table class="table mb-0">
+                <thead>
+                  <tr>
+                    <th class="text-center">Product Image</th>
+                    <th class="text-center">Product Name</th>
+                    <th class="text-center">Quantity</th>
+                    <th class="text-center">Price</th>
+                    <th class="text-center">Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for product in products %}
+                  <tr style="vertical-align: middle;">
+                    <td class="text-center">
+                      <img src="{{url_for('static', filename='uploads/product_img/' + product.image)}}" alt="{{ product.name }}" class="img-thumbnail"
+                      style="max-width: 100px; height: auto; object-fit: contain;">
+                    </td>
+                    <td class="text-center">{{ product.name }}</td>
+                    <td class="text-center">
+                      <div class="input-group input-group-sm align-content-center" style="max-width: 200px; display: flex; align-items: center; justify-content: center;">
+                        <!-- Tombol minus -->
+                        <form action="{{ url_for('update_cart', product_id=product.product_id, action='decrease') }}" method="POST" style="margin: 0;">
+                          <button type="submit" class="btn btn-outline-secondary btn-sm">-</button>
+                        </form>
+    
+                        <!-- Jumlah -->
+                        <input type="text" class="form-control text-center mx-1" value="{{ product.quantity }}" readonly style="width: 20px;">
+    
+                        <!-- Tombol plus -->
+                        <form action="{{ url_for('update_cart', product_id=product.product_id, action='increase') }}" method="POST" style="margin: 0;">
+                          <button type="submit" class="btn btn-outline-secondary btn-sm">+</button>
+                        </form>
+                      </div>
+                    </td>
+                    <td class="text-center">{{ product.price_sell | rupiah }}</td>
+                    <td class="text-center">{{ product.subtotal | rupiah }}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+    
+          <div class="col-12 text-end">
+            <h4>Total: {{ total_price | rupiah }}</h4>
+            <a href="{{ url_for('checkout') }}" class="btn btn-primary rounded-pill">Proceed to Checkout</a>
+          </div>
+    
+          {% else %}
+          <div class="col-12">
+            <p>Your cart is empty. Please add some products.</p>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    
+
+    <div class="divider"></div>
+    <!-- Footer -->
+    {% include 'footer.html' %}
+    <!-- Scroll To Top -->
+    <div id="scrollTopButton"><i class="bi bi-arrow-up-short"></i></div>
+    <!-- All JavaScript Files-->
+    <script src="{{ url_for('static', filename='js/all-js-libraries.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/active.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+  </body>
+</html>

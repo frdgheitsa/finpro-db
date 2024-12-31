@@ -1,0 +1,22 @@
+<!-- modal.html -->
+<div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="messageModalLabel">Message</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Menampilkan pesan flash jika ada -->
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        <h5 id="messageText">{{ messages[0] }}</h5> <!-- Menampilkan pesan pertama -->
+                    {% endif %}
+                {% endwith %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning btn-sm rounded-pill" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

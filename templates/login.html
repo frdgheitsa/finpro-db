@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Funto - HTML NFT Marketplace">
+    <!-- Title-->
+    <title>Galaxy Solusindo (Gasol) | Toko Komputer Malang dan Surabaya</title>
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/logogasol.png') }}" type="image/x-icon">
+    <!-- All CSS Stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/all-css-libraries.css') }}">
+    <!-- Core Stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  </head>
+  <body>
+    <!-- Modal -->
+    {% include 'modal.html' %}
+    <!-- Preloader-->
+    <div class="preloader" id="preloader">
+        <div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>
+    </div>
+    <!-- Header -->
+    {% include 'navbar.html' %}
+    <!-- Breadcrumb -->
+    <div class="breadcrumb-wrapper">
+      <div class="container">
+        <div class="breadcrumb-content">
+          <h2 class="breadcrumb-title">Log In</h2>
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb justify-content-center">
+              <li class="breadcrumb-item"><a href="{{ url_for('home') }}">Home</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Log In</li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <!-- Login -->
+    <div class="register-area">
+      <div class="container">
+        <div class="row g-4 g-lg-5 align-items-center justify-content-between">
+          <div class="col-12 col-md-6 col-xl-5">
+            <div class="register-card">
+              <h2>Welcome Back!</h2>
+              <p>Didn't have an account?<a class="ms-1 hover-primary" href="{{ url_for('register') }}">Register now!</a></p>
+              <!-- Login Form -->
+              <div class="register-form mt-5">
+                <form action="/login" method="post">
+                  <div class="form-group mb-4">
+                    <input class="form-control" type="email" name="email" placeholder="Email Address" required>
+                  </div>
+                  <div class="form-group mb-4">
+                  <label class="label-psswd" for="registerPassword">Show</label>
+                    <input class="form-control" id="registerPassword" type="password" name="password" placeholder="Password" required>
+                  </div>
+                  <button class="btn btn-success w-100" type="submit">Log In</button>
+                </form>
+                <div class="login-meta-data d-flex align-items-center justify-content-between">
+                  <div class="form-check mt-4">
+                    <input class="form-check-input" id="rememberMe" type="checkbox" value="" checked>
+                    <label class="form-check-label" for="rememberMe">Keep me logged in</label>
+                  </div><a class="forgot-password mt-4 text-primary fz-16" href="{{url_for('forget_password')}}">Forgot Password?</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Thumbnail -->
+          <div class="col-12 col-md-6">
+            <div class="register-thumbnail mt-5 mt-md-0">
+              <img src="{{ url_for('static', filename='img/illustrator/4.png') }}" alt="">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <!-- Footer -->
+    {% include 'footer.html' %}
+    <!-- Scroll To Top -->
+    <div id="scrollTopButton"><i class="bi bi-arrow-up-short"></i></div>
+    <!-- All JavaScript Files-->
+    <script src="{{ url_for('static', filename='js/all-js-libraries.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/active.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+  </body>
+</html>

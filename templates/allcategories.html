@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description">
+    <!-- Title-->
+    <title>Galaxy Solusindo (Gasol) | Toko Komputer Malang dan Surabaya</title>
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/logogasol.png') }}" type="image/x-icon">
+    <!-- All CSS Stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/all-css-libraries.css') }}">
+    <!-- Core Stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  </head>
+  <body>
+    <!-- Modal -->
+    {% include 'modal.html' %}
+    <!-- Preloader-->
+    <div class="preloader" id="preloader">
+      <div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>
+    </div>
+    <!-- Header Area-->
+    {% include 'navbar.html' %}
+    <!-- Breadcrumb -->
+    <div class="breadcrumb-wrapper">
+      <div class="container">
+        <div class="breadcrumb-content">
+          <h2 class="breadcrumb-title">Categories</h2>
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb justify-content-center">
+              <li class="breadcrumb-item"><a href="{{url_for('home')}}">Home</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Categories</li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="collection-wrapper">
+      <div class="container">
+        <div class="row">
+          {% for category in categories %}
+          <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
+            <!-- Mengarahkan ke /category/<category_id> -->
+            <a href="{{ url_for('explore_all', page=1, category=category.category_id, query='') }}" class="text-decoration-none">
+                <div class="catagory-card card shadow-sm fixed-width-card" style="height: 420px;">
+                    <div class="card-body">
+                        <div class="row g-1">
+                            <img class="rounded" src="../static/uploads/category_img/{{ category.image }}" style="height: 280px;">
+                        </div>
+                        <div class="row mt-3">
+                            <h5 class="mb-0">{{ category.category_name }} <span class="badge bg-primary ms-2">{{ category.category_count }}</span></h5>
+                        </div>
+                    </div>
+                </div>
+            </a>
+          </div>        
+          {% endfor %}
+        </div>        
+      <!-- Pagination -->
+      <div class="row">
+          <div class="col-12 text-center">
+              <ul class="pagination d-flex justify-content-center">
+                  {% if page > 1 %}
+                      <li class="page-item"><a class="page-link" href="{{ url_for('all_categories', page=page-1) }}">Previous</a></li>
+                  {% else %}
+                      <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+                  {% endif %}
+                  
+                  {% for p in range(1, total_pages+1) %}
+                      <li class="page-item {% if p == page %}active{% endif %}">
+                          <a class="page-link" href="{{ url_for('all_categories', page=p) }}">{{ p }}</a>
+                      </li>
+                  {% endfor %}
+                  
+                  {% if page < total_pages %}
+                      <li class="page-item"><a class="page-link" href="{{ url_for('all_categories', page=page+1) }}">Next</a></li>
+                  {% else %}
+                      <li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
+                  {% endif %}
+              </ul>
+          </div>
+      </div>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <!-- Footer -->
+    {% include 'footer.html' %}
+    <!-- Scroll To Top -->
+    <div id="scrollTopButton"><i class="bi bi-arrow-up-short"></i></div>
+    <!-- All JavaScript Files-->
+    <script src="{{ url_for('static', filename='js/all-js-libraries.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/active.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+  </body>
+</html>

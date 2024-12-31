@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Funto - HTML NFT Marketplace">
+    <!-- Title-->
+    <title>Galaxy Solusindo (Gasol) | Toko Komputer Malang dan Surabaya</title>
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/logogasol.png') }}" type="image/x-icon">
+    <!-- All CSS Stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/all-css-libraries.css') }}">
+    <!-- Core Stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  </head>
+  <body>
+    <!-- Modal -->
+    {% include 'modal.html' %}
+    <!-- Preloader-->
+    <div class="preloader" id="preloader">
+      <div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>
+    </div>
+    <!-- Header Wrapper -->
+    <header class="header-area dashboard-header px-0 px-sm-0">
+      <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+          <div class="d-flex align-items-center">
+            <!-- Brand Logo -->
+            <div class="navbar-brand me-2">
+              <img class="light-logo" src="{{ url_for('static', filename='img/gasol-img-light.png') }}" style="height: 50px">
+              <img class="dark-logo" src="{{ url_for('static', filename='img/gasol-img-dark.png') }}" style="height: 50px">
+            </div>
+          </div>
+          <!-- Header Meta -->
+          <div class="header-meta d-flex align-items-center">
+            <!-- Menu Toggler -->
+            <div class="menu-toggler ms-2 ms-sm-3" id="dashboardMenuTrigger"><i class="bi bi-list"></i></div>
+            <!-- Button --><a class="btn btn-sm btn-danger rounded-pill ms-2 ms-sm-3 d-none d-sm-block" href="{{url_for('home')}}"><i></i>Baack</a>
+          </div>
+        </div>
+      </nav>
+    </header>
+    <!-- Admin Sidebar Wrap -->
+    <div class="admin-sidebar-wrap">
+      <div class="overflowY-scroll">
+        <!-- User Profile -->
+        <div class="user-profile">
+          <!-- User Name -->
+          <div class="user-name mb-5">
+            <div class="d-flex align-items-center"><img src="{{ url_for('static', filename='img/bg-img/u2.jpg') }}" class="img-thumbnail rounded-pill">
+              <div class="ms-3">
+                <h6 class="lh-1 text-dark fz-18">
+                  {{ session.get('username', '') }}
+              </h6>
+              {% if session.get('role') == 'owner'%}
+              <span class="badge bg-primary fz-12">Owner</span>
+              {% elif session.get('role') == 'admin'%}
+              <span class="badge bg-primary fz-12">Admin</span>
+              {% elif session.get('role') == 'employee'%}
+              <span class="badge bg-primary fz-12">Employee</span>
+              {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Sidenav -->
+        <div class="sidenav">
+          <ul>
+            <li>Menu</li>
+            <li><a class="active" href="{{url_for('admin')}}"><i class="bi bi-speedometer"></i>Dashboard</a></li>
+            <li><a href="{{url_for('add_product_form')}}"><i class="bi bi-plus-square"></i>Add Product</a></li>
+            <li><a href="{{ url_for('manage_products', page=1, category=0, query='') }}"><i class="bi bi-list-task"></i>List Product</a></li>
+            <li><a href="{{ url_for('order_data', page=1) }}"><i class="bi bi-clipboard-data-fill"></i>Ordered Data</a></li>
+            <li><a href=""><i class="bi bi-gear"></i>Settings</a></li>
+          </ul>
+        </div>
+        <div class="mt-auto">
+          <div class="mt-5"></div>
+          <!-- Mode Switching -->
+          <div class="dark-light-mode">
+            <input id="darkLightSwitch" type="checkbox">
+            <label class="shadow" for="darkLightSwitch">Toggle</label>
+          </div>
+          <div class="copywrite-text mt-4">
+            <p class="mb-0 fz-14">2022 &copy; All rights reserved by <a class="fz-14" href="settings.html#" target="_blank">Designing World</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="admin-wrapper">
+        <div class="container">
+          <div class="row g-4 justify-content-center">
+            <div class="col-12 col-lg-6">
+              <div class="card">
+                <div class="card-body p-4 p-sm-5">
+                  <h3 class="text-center mb-4">Create Account</h3>
+                  <form action="{{ url_for('create_account') }}" method="POST">
+                    <div class="row g-3">
+                      <!-- Username -->
+                      <div class="col-12">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" class="form-control bg-gray border-0" id="username" name="username" placeholder="Enter your username" required>
+                      </div>
+      
+                      <!-- Fullname -->
+                      <div class="col-12">
+                        <label for="fullname" class="form-label">Full Name</label>
+                        <input type="text" class="form-control bg-gray border-0" id="fullname" name="fullname" placeholder="Enter your full name" required>
+                      </div>
+      
+                      <!-- Email -->
+                      <div class="col-12">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control bg-gray border-0" id="email" name="email" placeholder="Enter your email" required>
+                      </div>
+      
+                      <!-- Password -->
+                      <div class="col-12">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control bg-gray border-0" id="password" name="password" placeholder="Enter your password" required>
+                      </div>
+      
+                      <!-- Confirm Password -->
+                      <div class="col-12">
+                        <label for="confirm_password" class="form-label">Confirm Password</label>
+                        <input type="password" class="form-control bg-gray border-0" id="confirm_password" name="confirm_password" placeholder="Confirm your password" required>
+                      </div>
+      
+                      <!-- Role Selector -->
+                      <div class="col-12">
+                        <label for="role" class="form-label">Role</label>
+                        <select class="form-select bg-gray border-0" id="role" name="role" required>
+                          <option value="" disabled selected>Select your role</option>
+                          <option value="employee">Employee</option>
+                          <option value="admin">Admin</option>
+                        </select>
+                      </div>
+      
+                      <!-- Submit Button -->
+                      <div class="col-12">
+                        <button type="submit" class="btn btn-primary w-100 rounded-pill">
+                          <i class="bi bi-person-plus me-1"></i> Create Account
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>      
+    <!-- All JavaScript Files-->
+    <script src="{{ url_for('static', filename='js/all-js-libraries.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/active.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+  </body>
+</html>
+

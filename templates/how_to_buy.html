@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description">
+    <!-- Title-->
+    <title>Galaxy Solusindo (Gasol) | Toko Komputer Malang dan Surabaya</title>
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/logogasol.png') }}" type="image/x-icon">
+    <!-- All CSS Stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/all-css-libraries.css') }}">
+    <!-- Core Stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  </head>
+  <body>
+        <!-- Modal -->
+        {% include 'modal.html' %}
+        <!-- Preloader-->
+        <div class="preloader" id="preloader">
+            <div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>
+          </div>
+        <!-- Header -->
+
+    {% include 'navbar.html' %}
+    <!-- Breadcrumb -->
+    <div class="breadcrumb-wrapper">
+      <div class="container">
+        <div class="breadcrumb-content">
+          <h2 class="breadcrumb-title">How to Buy</h2>
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb justify-content-center">
+              <li class="breadcrumb-item"><a href="{{ url_for('home') }}">Home</a></li>
+              <li class="breadcrumb-item active" aria-current="page">How to buy</li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <!-- Blog Details  -->
+    <div class="blog-details-wrap">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-10">
+            <div class="text-center">
+              <h1 class="display-5 fw-bold mb-4">Silakan mengikuti petunjuk di bawah ini dan Anda siap untuk mulai berbelanja  </h1>
+              <div class="post-date border border-2 border-info rounded px-2 py-1 d-inline-block fz-14"></div>
+            </div>
+            <div class="mb-5"></div>
+          </div>
+          <div class="col-12"><img class="mb-5" src="img/bg-img/44.jpg" alt="" data-action="zoom"></div>
+          <div class="col-10">
+            <h2 class="mb-3">Langkah - langkah Pembelian</h2>
+              <ul>
+                <li>Klik tombol "ADD TO CART" pada item yang anda inginkan. Item akan ditambahkan ke keranjang</li>
+                <li>Klik simbol keranjang pada navigasi. Anda akan diantar menuju halaman 'Keranjang Belanja'</li>
+                <li>Jika ingin melanjutkan pembelian barang lain, klik tombol "Back" dan silahkan memilih produk lain yang anda inginkan. Kapan saja Anda dapat melihat daftar belanjaan yang telah anda pilih dengan mengklik "Shopping Cart" , dan anda akan diantar lagi menuju halaman "Keranjang Belanja"</li>
+                <li>Dan jika Anda merasa telah cukup memilih barang, maka silahkan klik tombol "Procceed to Checkout"</li>
+                <li>Lalu isi formulir yang disediakan</li>
+                <li>Jika anda memilih metode pengiriman "Bank Transfer" anda akan diminta untuk melakukan transfer ke rekening yang telah disediakan</li>
+                <li>Setelah melakukan transfer, silahkan kirimkan bukti transfer ke form yang telah disediakan</li>
+                <li>Setelah semua formulir diisi maka klik tombol "Place order"</li>
+              </ul>
+
+            <h2 class="mb-3">Setelah Place Order</h2>
+              <ul>
+                <li>Order Anda telah kami terima. Dimohon menunggu kabar secepatnya dari kami untuk verifikasi order dan kalkulasi biaya pengiriman (menggunakan jasa kurir pilihan anda) ke alamat anda</li>
+                <li>Setelah kalkulasi total selesai, kami persilahkan anda melakukan pembayaran </li>
+                <li>Belanjaan Anda akan kami kirim segera beserta nomer resi pengiriman </li>
+                </ul>
+
+            <h2 class="mb-3">Video Lengkap Untuk Pembelian</h2>
+              <ul>
+              </ul>
+        </div>
+
+      </div>
+    </div>
+    <!-- Footer -->
+    {% include 'footer.html' %}
+    <!-- Scroll To Top -->
+    <div id="scrollTopButton"><i class="bi bi-arrow-up-short"></i></div>
+    <!-- All JavaScript Files-->
+    <script src="{{ url_for('static', filename='js/all-js-libraries.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/active.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+  </body>
+</html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Funto - HTML NFT Marketplace">
+    <title>Galaxy Solusindo (Gasol) | Toko Komputer Malang dan Surabaya</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/logogasol.png') }}" type="image/x-icon">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/all-css-libraries.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+  </head>
+  <body>
+    {% include 'modal.html' %}
+    <div class="preloader" id="preloader">
+      <div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>
+    </div>
+    <header class="header-area dashboard-header px-0 px-sm-0">
+      <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+          <div class="d-flex align-items-center">
+            <div class="navbar-brand me-2">
+              <img class="light-logo" src="{{ url_for('static', filename='img/gasol-img-light.png') }}" style="height: 50px">
+              <img class="dark-logo" src="{{ url_for('static', filename='img/gasol-img-dark.png') }}" style="height: 50px">
+            </div>
+          </div>
+          <div class="header-meta d-flex align-items-center">
+            <div class="menu-toggler ms-2 ms-sm-3" id="dashboardMenuTrigger"><i class="bi bi-list"></i></div>
+            <a class="btn btn-sm btn-danger rounded-pill ms-2 ms-sm-3 d-none d-sm-block" href="{{url_for('home')}}">Back</a>
+          </div>
+        </div>
+      </nav>
+    </header>
+    <div class="admin-sidebar-wrap">
+      <div class="overflowY-scroll">
+        <div class="user-profile">
+          <div class="user-name mb-5">
+            <div class="d-flex align-items-center">
+              <img src="{{ url_for('static', filename='img/bg-img/u2.jpg') }}" class="img-thumbnail rounded-pill">
+              <div class="ms-3">
+                <h6 class="lh-1 text-dark fz-18">{{ session.get('username', '') }}</h6>
+                <span class="badge bg-primary fz-12">Owner</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="sidenav">
+          <ul>
+            <li>Menu</li>
+            <li><a class="active" href="{{url_for('admin')}}"><i class="bi bi-speedometer"></i>Dashboard</a></li>
+            <li><a href="{{url_for('add_product_form')}}"><i class="bi bi-plus-square"></i>Add Product</a></li>
+            <li><a href="{{ url_for('manage_products', page=1, category=0, query='') }}"><i class="bi bi-list-task"></i>List Product</a></li>
+            <li><a href="{{ url_for('order_data', page=1) }}"><i class="bi bi-clipboard-data-fill"></i>Ordered Data</a></li>
+            <li><a href="{{ url_for('logout') }}"><i class="bi bi-box-arrow-right"></i>Logout</a></li>
+          </ul>
+        </div>
+        <div class="mt-auto">
+          <div class="mt-5"></div>
+          <!-- Mode Switching -->
+          <div class="dark-light-mode">
+            <input id="darkLightSwitch" type="checkbox">
+            <label class="shadow" for="darkLightSwitch">Toggle</label>
+          </div>
+          <div class="copywrite-text mt-4">
+            <p class="mb-0 fz-14">2022 &copy; All rights reserved by <a class="fz-14" href="dashboard.html#" target="_blank">Designing World</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="admin-wrapper">
+      <div class="container">
+        <div class="col-12 col-sm-12">
+            <form method="get" action="{{ url_for('list_account') }}" class="d-flex justify-content-between align-items-center" style="gap: 30rem;">
+                <!-- Input Search -->
+                <div class="input-group w-100">
+                    <input 
+                        type="search" 
+                        name="query" 
+                        class="form-control" 
+                        placeholder="Search accounts..." 
+                        value="{{ search_query }}">
+                </div>
+                <!-- Filter Role -->
+                <select name="role" class="filter-select w-100" onchange="this.form.submit()">
+                    <option value="all" {% if role_filter == 'all' %}selected{% endif %}>All Roles</option>
+                    <option value="admin" {% if role_filter == 'admin' %}selected{% endif %}>Admin</option>
+                    <option value="employee" {% if role_filter == 'employee' %}selected{% endif %}>Employee</option>
+                    <option value="customer" {% if role_filter == 'customer' %}selected{% endif %}>Customer</option>
+                </select>
+            </form>
+        </div>
+    </div>
+    <div class="mt-4 d-block w-100"></div>
+    <div class="container">
+      <div class="table-responsive border shadow-sm activity-table mb-70">
+          <table class="table mb-0">
+              <thead>
+                  <tr>
+                      <th scope="col" class="text-center">No</th>
+                      <th scope="col" class="text-center">Email</th>
+                      <th scope="col" class="text-center">Username</th>
+                      <th scope="col" class="text-center">Full Name</th>
+                      <th scope="col" class="text-center">Role</th>
+                      <th scope="col" class="text-center">Actions</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  {% if accounts|length > 0 %}
+                      {% for account in accounts %}
+                          <tr>
+                              <td class="text-center">{{ loop.index }}</td>
+                              <td class="text-center">{{ account.email }}</td>
+                              <td class="text-center">{{ account.username }}</td>
+                              <td class="text-center">{{ account.fullname }}</td>
+                              <td class="text-center">{{ account.role }}</td>
+                              <td class="text-center">
+                                <a href="{{ url_for('manage_account', account_id=account.account_id) }}" class="btn btn-warning btn-sm" title="Update">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <form action="{{ url_for('delete_account', account_id=account.account_id) }}" method="POST" style="display:inline;">
+                                    <button type="submit" name="delete" class="btn btn-danger btn-sm ms-2" onclick="return confirm('Are you sure you want to delete this account?');" title="Delete">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                          </tr>
+                      {% endfor %}
+                  {% else %}
+                      <tr>
+                          <td colspan="6" class="text-center">No accounts available.</td>
+                      </tr>
+                  {% endif %}
+              </tbody>
+          </table>
+      </div>
+      <!-- Pagination -->
+      <div class="row">
+          <div class="col-12 text-center">
+              <ul class="pagination justify-content-center mb-0">
+                  <li class="page-item {% if current_page == 1 %}disabled{% endif %}">
+                      <a class="page-link" href="{{ url_for('list_account', page=1, role=role_filter, query=search_query) }}">First</a>
+                  </li>
+                  <li class="page-item {% if current_page == 1 %}disabled{% endif %}">
+                      <a class="page-link" href="{{ url_for('list_account', page=current_page-1, role=role_filter, query=search_query) }}">Prev</a>
+                  </li>
+                  {% for page_num in range(1, total_pages + 1) %}
+                      <li class="page-item {% if page_num == current_page %}active{% endif %}">
+                          <a class="page-link" href="{{ url_for('list_account', page=page_num, role=role_filter, query=search_query) }}">{{ page_num }}</a>
+                      </li>
+                  {% endfor %}
+                  <li class="page-item {% if current_page == total_pages %}disabled{% endif %}">
+                      <a class="page-link" href="{{ url_for('list_account', page=current_page+1, role=role_filter, query=search_query) }}">Next</a>
+                  </li>
+                  <li class="page-item {% if current_page == total_pages %}disabled{% endif %}">
+                      <a class="page-link" href="{{ url_for('list_account', page=total_pages, role=role_filter, query=search_query) }}">Last</a>
+                  </li>
+              </ul>
+          </div>
+      </div>
+  </div>  
+    </div>
+    <script src="{{ url_for('static', filename='js/all-js-libraries.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/active.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+  </body>
+</html>

@@ -1,0 +1,107 @@
+<!-- navbar -->
+<header class="header-area">
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <!-- Navbar Brand -->
+            <a class="navbar-brand me-2" href="{{ url_for('home') }}">
+                <img class="light-logo" src="../static/img/gasol-img-light.png" style="height: 50px">
+                <img class="dark-logo" src="../static/img/gasol-img-dark.png" style="height: 50px">
+            </a>
+            <!-- Navbar Toggler -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#funtoNav"
+                aria-controls="funtoNav" aria-expanded="false" aria-label="Toggle navigation"><i
+                    class="bi bi-grid"></i></button>
+            <!-- Navbar -->
+            <div class="collapse navbar-collapse" id="funtoNav">
+                <ul class="navbar-nav navbar-nav-scroll my-2 my-lg-0">
+                    <li>
+                        <a href="{{ url_for('home') }}" class="px-3">Home</a>
+                      </li>
+                      
+                    </li>
+                    <li class=""><a href="#" class="px-3">About Us</a>
+                    </li>
+                    <li class=""><a href="{{ url_for('how_to_buy') }}" class="px-3">How to Buy</a>
+                    </li>
+                    <li class="ft-dd"><a href="#">Contact Us</a>
+                        <ul class="ft-dd-menu">
+                            <li><a href="https://wa.me/62811333612">Galaxy Maspion Surabaya </a></li>
+                            <li><a href="https://wa.me/6285855953502">Galaxy Dinoyo Malang </a></li>
+                            <li><a href="https://wa.me/6281216578445">Galaxy CyberMAll Malang </a></li>
+                            <li><a href="https://wa.me/6285736188867">Galaxy Sumbersari Malang </a></li>
+                            <li><a href="https://wa.me/6285812407157">Galaxy Kaliurang Malang </a></li>
+                            <li><a href="https://wa.me/6281330640582">Galaxy Tlogomas Malang </a></li>
+
+                        </ul>
+                    </li>
+                    <li class=""><a href="{{ url_for('waranty') }}">Waranty Licences</a></li>
+                         <!-- <ul class="ft-dd-menu">
+                            <li><a href="#">Waranty Licences</a></li>
+                        </ul> -->
+                    </li>
+                </ul>
+                <!-- Header Meta -->
+                <div class="header-meta d-flex align-items-right ms-lg-auto">
+                        <!-- Cart Icon -->
+                        <div class="cart">
+                            <a href="{{ url_for('cart') }}" class="btn btn-outline-secondary btn-sm position-relative">
+                                <i class="bi bi-cart"></i>
+                                {% if session.get('cart_count', 0) > 0 %}
+                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                        {{ session.get('cart_count') }}
+                                    </span>
+                                {% else %}
+                                    <span>No items</span> <!-- Untuk debugging -->
+                                {% endif %}
+                            </a>
+                        </div>
+                        <!-- User Dropdown -->
+                        {% if session['user_id'] %}
+                        <div class="user-dropdown dropdown mx-3">
+                            <button class="btn dropdown-toggle user-btn" id="dropdownMenuButton1" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-three-dots"></i>
+                            </button>
+                            <ul class="dropdown-menu mt-3" aria-labelledby="dropdownMenuButton1">
+                            {% if session.get('role') == 'owner'%}
+                            <li><a class="dropdown-item" href="{{url_for('admin')}}"><i class="me-2 bi bi-speedometer"></i>Dashboard</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('add_product_form')}}"><i class="me-2 bi bi-plus-square"></i>Add Product</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('manage_products', page=1, category=0, query='') }}"><i class="me-2 bi bi-list-task"></i>List Product</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('order_data', page=1) }}"><i class="me-2 bi bi-clipboard-data-fill"></i>Ordered Data</a></li>
+                            {% elif session.get('role') == 'admin'%}
+                            <li><a class="dropdown-item" href="{{ url_for('add_product_form')}}"><i class="me-2 bi bi-plus-square"></i>Add Product</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('manage_products', page=1, category=0, query='') }}"><i class="me-2 bi bi-list-task"></i>List Product</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('order_data', page=1) }}"><i class="me-2 bi bi-clipboard-data-fill"></i>Ordered Data</a></li>
+                            {% elif session.get('role') == 'employee'%}
+                            <li><a class="dropdown-item" href="{{ url_for('add_product_form')}}"><i class="me-2 bi bi-plus-square"></i>Add Product</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('manage_products', page=1, category=0, query='') }}"><i class="me-2 bi bi-list-task"></i>List Product</a></li>
+                            {% else %}
+                            <li><a class="dropdown-item" href="{{url_for('transaction_history')}}"><i class="me-2 bi bi-clock-history"></i>Transaction History</a></li>
+                            <!-- Settings Option (Redirect to Login if not logged in) -->
+                            <li>
+                                {% if session.get('username') %}
+                                    <a class="dropdown-item" href="{{ url_for('settings') }}"><i class="me-2 bi bi-gear"></i>Settings</a>
+                                {% else %}
+                                    <a class="dropdown-item" href="{{ url_for('login') }}?message=login+required"><i class="me-2 bi bi-gear"></i>Settings</a>
+                                {% endif %}
+                            </li>
+                            {% endif %}
+                            <!-- Logout Option (Only if user is logged in) -->
+                            {% if session.get('username') %}
+                                <li><a class="dropdown-item" href="{{ url_for('logout') }}"><i class="me-2 bi bi-box-arrow-right"></i>Logout</a></li>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                    {% if session['username'] %}
+                    <a class="btn btn-warning btn-sm rounded-pill">{{ session['username'] }}</a>
+                {% else %}
+                    <a class="btn btn-warning btn-sm rounded-pill ms-2" href="{{ url_for('login') }}">Login / register</a>
+                {% endif %}
+                </div>
+                <div class="dark-light-mode" style="margin-left: 10px">
+                    <input id="darkLightSwitch" type="checkbox">
+                    <label class="shadow" for="darkLightSwitch">Toggle</label>
+                  </div>
+            </div>
+        </div>
+    </nav>
+</header>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Funto - HTML NFT Marketplace">
+    <title>Galaxy Solusindo (Gasol) | Toko Komputer Malang dan Surabaya</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/logogasol.png') }}" type="image/x-icon">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/all-css-libraries.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  </head>
+  <body>
+    {% include 'modal.html' %}
+    <div class="preloader" id="preloader">
+      <div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>
+    </div>
+    <header class="header-area dashboard-header px-0 px-sm-0">
+      <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+          <div class="d-flex align-items-center">
+            <div class="navbar-brand me-2">
+              <img class="light-logo" src="{{ url_for('static', filename='img/gasol-img-light.png') }}" style="height: 50px">
+              <img class="dark-logo" src="{{ url_for('static', filename='img/gasol-img-dark.png') }}" style="height: 50px">
+            </div>
+          </div>
+          <div class="header-meta d-flex align-items-center">
+            <div class="menu-toggler ms-2 ms-sm-3" id="dashboardMenuTrigger"><i class="bi bi-list"></i></div>
+            <a class="btn btn-sm btn-danger rounded-pill ms-2 ms-sm-3 d-none d-sm-block" href="{{url_for('home')}}"><i></i>Back</a>
+          </div>
+        </div>
+      </nav>
+    </header>
+    <div class="admin-sidebar-wrap">
+      <div class="overflowY-scroll">
+        <div class="user-profile">
+          <div class="user-name mb-5">
+            <div class="d-flex align-items-center"><img src="{{ url_for('static', filename='img/bg-img/u2.jpg') }}" class="img-thumbnail rounded-pill">
+              <div class="ms-3">
+                <h6 class="lh-1 text-dark fz-18">{{ account['username'] }}</h6>
+                <span class="badge bg-primary fz-12">{{ account['role'] }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="sidenav">
+          <ul>
+            <li>Menu</li>
+            <li><a class="active" href="{{url_for('admin')}}"><i class="bi bi-speedometer"></i>Dashboard</a></li>
+            <li><a href="{{url_for('add_product_form')}}"><i class="bi bi-plus-square"></i>Add Product</a></li>
+            <li><a href="{{ url_for('manage_products', page=1, category=0, query='') }}"><i class="bi bi-list-task"></i>List Product</a></li>
+            <li><a href="{{ url_for('order_data', page=1) }}"><i class="bi bi-clipboard-data-fill"></i>Ordered Data</a></li>
+            <li><a href="{{ url_for('logout') }}"><i class="bi bi-box-arrow-right"></i>Logout</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="admin-wrapper">
+      <div class="container">
+        <div class="row g-4 justify-content-center">
+          <div class="col-12 col-lg-6">
+            <div class="card">
+              <div class="card-body p-4 p-sm-5">
+                <h3 class="text-center mb-4">Update Account</h3>
+                <form action="{{ url_for('manage_account', account_id=account['account_id']) }}" method="POST" name="update">
+                    <div class="row g-3">
+                      <div class="col-12">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" class="form-control bg-gray border-0" id="username" name="username" value="{{ account['username'] }}" required>
+                      </div>
+                      <div class="col-12">
+                        <label for="fullname" class="form-label">Full Name</label>
+                        <input type="text" class="form-control bg-gray border-0" id="fullname" name="fullname" value="{{ account['fullname'] }}" required>
+                      </div>
+                      <div class="col-12">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control bg-gray border-0" id="email" name="email" value="{{ account['email'] }}" required>
+                      </div>
+                      <div class="col-12">
+                        <button type="submit" class="btn btn-primary w-100 rounded-pill">
+                          <i class="bi bi-person-plus me-1"></i> Update Account
+                        </button>
+                      </div>
+                    </div>
+                  </form>                  
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>      
+    </div>  
+    <script src="{{ url_for('static', filename='js/all-js-libraries.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/active.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+  </body>
+</html>

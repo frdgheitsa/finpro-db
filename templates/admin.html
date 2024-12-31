@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Funto - HTML NFT Marketplace">
+    <!-- Title-->
+    <title>Galaxy Solusindo (Gasol) | Toko Komputer Malang dan Surabaya</title>
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/logogasol.png') }}" type="image/x-icon">
+    <!-- All CSS Stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/all-css-libraries.css') }}">
+    <!-- Core Stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  </head>
+  <body>
+    <!-- Modal -->
+    {% include 'modal.html' %}
+    <!-- Preloader-->
+    <div class="preloader" id="preloader">
+      <div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>
+    </div>
+    <!-- Header Wrapper -->
+    <header class="header-area dashboard-header px-0 px-sm-0">
+      <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+          <div class="d-flex align-items-center">
+            <!-- Brand Logo -->
+            <div class="navbar-brand me-2">
+              <img class="light-logo" src="{{ url_for('static', filename='img/gasol-img-light.png') }}" style="height: 50px">
+              <img class="dark-logo" src="{{ url_for('static', filename='img/gasol-img-dark.png') }}" style="height: 50px">
+            </div>
+          </div>
+          <!-- Header Meta -->
+          <div class="header-meta d-flex align-items-center">
+            <!-- Menu Toggler -->
+            <div class="menu-toggler ms-2 ms-sm-3" id="dashboardMenuTrigger"><i class="bi bi-list"></i></div>
+            <!-- Button --><a class="btn btn-sm btn-danger rounded-pill ms-2 ms-sm-3 d-none d-sm-block" href="{{url_for('home')}}"><i></i>Back</a>
+          </div>
+        </div>
+      </nav>
+    </header>
+    <!-- Admin Sidebar Wrap -->
+    <div class="admin-sidebar-wrap">
+      <div class="overflowY-scroll">
+        <!-- User Profile -->
+        <div class="user-profile">
+          <!-- User Name -->
+          <div class="user-name mb-5">
+            <div class="d-flex align-items-center"><img src="{{ url_for('static', filename='img/bg-img/u2.jpg') }}" class="img-thumbnail rounded-pill">
+              <div class="ms-3">
+                <h6 class="lh-1 text-dark fz-18">{{ session.get('username', '') }}</h6><span class="badge bg-primary fz-12">Owner</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Sidenav -->
+        <div class="sidenav">
+          <ul>
+            <li>Menu</li>
+            <li><a class="active" href="{{url_for('admin')}}"><i class="bi bi-speedometer"></i>Dashboard</a></li>
+            <li><a href="{{ url_for('add_product_form')}}"><i class="bi bi-plus-square"></i>Add Product</a></li>
+            <li><a href="{{ url_for('manage_products', page=1, category=0, query='') }}"><i class="bi bi-list-task"></i>List Product</a></li>
+            <li><a href="{{ url_for('order_data', page=1) }}"><i class="bi bi-clipboard-data-fill"></i>Ordered Data</a></li>
+            <li><a href="{{ url_for('logout') }}"><i class="bi bi-box-arrow-right"></i>Logout</a></li>
+          </ul>
+        </div>
+        <div class="mt-auto">
+          <div class="mt-5"></div>
+          <!-- Mode Switching -->
+          <div class="dark-light-mode">
+            <input id="darkLightSwitch" type="checkbox">
+            <label class="shadow" for="darkLightSwitch">Toggle</label>
+          </div>
+          <div class="copywrite-text mt-4">
+            <p class="mb-0 fz-14">2024 &copy; All rights reserved by <a class="fz-14" target="_blank">Lienka</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="admin-wrapper">
+      <div class="container">
+        <div class="row g-4">
+          <div class="col-12 col-xxl-6">
+            <div class="row g-4">
+              <!-- Welcome Card -->
+              <div class="col-12">
+                <div class="card dashboard-hero-card p-2 border-0 bg-img shadow-sm" style="background-image: url('img/bg-img/44.jpg')">
+                  <div class="card-body p-4">
+                    <h3 class="mb-3 text-white">You are Owners.</h3>
+                    <p class="mb-4 text-white">As owners, you have the authority to create and manage accounts for employees and other admins.</p>
+                    <div class="button-groups"><a class="btn btn-sm btn-warning rounded-pill me-3" href="{{ url_for('list_account') }}">Manage</a><a class="btn btn-sm btn-dark rounded-pill" href="{{ url_for('create_account') }}">Create</a></div>
+                  </div>
+                </div>
+              </div>
+              {% if profit and profit|length > 0 %}
+              <!-- Profit Card -->
+              <div class="col-12 col-sm-6">
+                <a href="{{ url_for('financial_report') }}" class="text-decoration-none">
+                  <div class="card border-0 shadow-sm">
+                    <div class="card-body p-4">
+                      <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                          <h5 class="mb-2">Profit</h5>
+                          <h6>{{ profit[0]['total_profit'] | rupiah }}</h6>
+                          <span>{{ profit[0]['transaction_month'].strftime('%B %Y') }}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              </div>
+              <!-- Revenue Card -->
+              <div class="col-12 col-sm-6">
+                <a href="{{ url_for('financial_report') }}" class="text-decoration-none">
+                  <div class="card border-0 shadow-sm">
+                    <div class="card-body p-4">
+                      <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                          <h5 class="mb-2">Revenue</h5>
+                          <h6>{{ profit[0]['total_revenue'] | rupiah }}</h6>
+                          <span>{{ profit[0]['transaction_month'].strftime('%B %Y') }}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              </div>
+              {% else %}
+              <div class="col-12">
+                <p>No profit data available for the selected period.</p>
+              </div>
+            {% endif %}
+            </div>
+          </div>
+          <div class="col-12 col-xxl-6">
+            <!-- Today Visitor -->
+            <div class="col-12">
+              <div class="card border-0 shadow-sm" style="height: 390px;">
+                <div class="card-body p-4 pb-0">
+                  <h5 class="ms-3">Today Visitors</h5>
+                  <span class="ms-3" id="datetime"></span>
+                  <div id="visitorChart"></div>
+                      <!-- Data view_data -->
+                <script id="viewData" type="application/json">
+                  {{ view_data | tojson }}
+              </script>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-xxl-12">
+            <div class="card border-0 shadow-sm">
+              <div class="card-body p-4">
+                <div class="d-flex flex-wrap align-items-center justify-content-center mb-3">
+                  <h5>Ordered Product</h5>
+                </div>
+                <div class="tab-content">
+                  <!-- Tab Pane-->
+                  <div class="tab-pane fade show active" id="tab1" role="tabpanel" aria-labelledby="tab--1">
+                    <div class="table-responsive border shadow-sm dashboard-table activity-table">
+                      <table class="table mb-0">
+                        <tbody>
+                          {% for order_item in order_items %}
+                          <tr>
+                            <th scope="row"><a class="btn btn-minimal text-dark hover-primary text-truncate" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ order_item.product_name }}">
+                              <img class="rounded me-1" src="{{url_for('static', filename='uploads/product_img/' + order_item.image)}}" alt="">
+                              {{order_item.product_name[:25]}}{% if order_item.product_name|length > 25 %}...{% endif %}</a></th>
+                            <td> <span class="d-inline-block fw-bold fz-14">{{order_item.product_price | rupiah}}</span></td>
+                            <td><i class="bi bi-cart"></i>{{order_item.quantity}}</td>
+                            <td><i class="bi bi-clock"></i>{{order_item.created_at}}</td>
+                          </tr>
+                        </tbody>
+                        {% endfor %}
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="card border-0 shadow-sm">
+              <div class="card-body p-4">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                  <h5>Top Products</h5><a class="btn btn-primary btn-minimal" href="{{ url_for('explore_all') }}">View all Product</a>
+                </div>
+                <div class="row g-4 justify-content-center">
+                  {% for top_item in top_items %}
+                  <div class="col-12 col-sm-6 col-xl-4">
+                    <div class="nft-card card featured-card border-0 bg-gray" style="height: 500px;">
+                      <div class="img-wrap"><img src="{{ url_for('static', filename='uploads/product_img/' + top_item.image) }}" alt="" style="height: 330px">
+                        <!-- Badge -->
+                        <div class="badge bg-primary position-absolute"><img src="../static/img/core-img/fire.png" alt="">Featured</div>
+                      </div>
+                      <div class="card-body">
+                        <!-- Others Info -->
+                        <div class="row gx-2 align-items-center">
+                          <div class="col-8"><span class="d-block fz-12"><i class="bi bi-arrow-up"></i>Sold {{ top_item.total_quantity }}</span></div>
+                        </div>
+                        <!-- Meta Info -->
+                        <div class="row gx-2 align-items-center mt-2">
+                          <div class="col-8">
+                            <div class="name-info d-flex align-items-center">
+                              <div class="name-author"><a class="name d-block hover-primary fw-bold text-truncate" href="item-details.html" data-bs-toggle="tooltip" data-bs-placement="top" title="{{   top_item.product_name }}">{{   top_item.product_name }}</a>
+                                <a class="author d-block fz-12 hover-primary text-truncate">{{   top_item.description }}</a></div>
+                            </div>
+                          </div>
+                          <div class="col-4">
+                            <div class="price text-end"><span class="fz-12 d-block">Price</span>
+                              <h6 class="mb-0">{{ top_item.product_price | rupiah }}</h6>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- Button -->
+                        <div class="row gx-2 align-items-center mt-3">
+                          <div class="col-6"><a class="btn btn-primary rounded-pill btn-sm" href="dashboard.html#">Details</a></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-xl-12">
+            <div class="card border-0 shadow-sm">
+              <div class="card-body p-4 pb-3">
+                <div class="d-flex align-items-center"><img class="me-1" src="../static/img/core-img/ethereum.png" alt="">
+                  <h5 class="mb-0">Transaction on Week</h5>
+                </div>
+                <div id="transactionChart"></div>
+                <script id="transactionData" type="application/json">
+                  {{ transaction_data | tojson }}
+              </script>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-md-6">
+            <div class="card border-0 shadow-sm">
+              <div class="card-body p-4">
+                <h5 class="mb-3">Top Admins</h5>
+                <div class="top-author-slide-wrap">
+                  <div class="top-authors-slide">
+                    {% for top_admin in top_admins %}
+                    <div data-bs-toggle="tooltip" data-bs-placement="top" title="Username: {{ top_admin.username }} | Total Handles: {{ top_admin.total_handles }}">
+                      <a href="#">
+                        <img src="{{ url_for('static', filename='img/bg-img/u2.jpg') }}" 
+                             style="height: 50px; width: 120px;">
+                      </a>
+                    </div>
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-md-6">
+            <div class="card border-0 shadow-sm">
+              <div class="card-body p-4">
+                <h5 class="mb-3">Top Buyers</h5>
+                <div class="top-buyer-slide-wrap">
+                  <div class="top-buyer-slide">
+                    {% for top_buyer in top_buyers %}
+                    <div data-bs-toggle="tooltip" data-bs-placement="top" title="Username: {{ top_buyer.username }} | Total Order: {{ top_buyer.total_orders }}">
+                      <a href="#">
+                        <img src="../static/uploads/profile_pictures/{{ top_buyer.profile_picture }}" 
+                             style="height: 50px; width: 120px;">
+                      </a>
+                    </div>
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- All JavaScript Files-->
+    <script>
+      // Mengambil data tanggal dari API
+      fetch('/api/get-date')
+        .then(response => response.json())
+        .then(data => {
+          // Menampilkan tanggal yang diformat di frontend
+          document.getElementById('datetime').innerText = data.current_date;
+        })
+        .catch(error => console.error('Error fetching data:', error));
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="{{ url_for('static', filename='js/all-js-libraries.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/active.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+  </body>
+</html>

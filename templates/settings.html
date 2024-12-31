@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description">
+    <!-- Title-->
+    <title>Galaxy Solusindo (Gasol) | Toko Komputer Malang dan Surabaya</title>
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/logogasol.png') }}" type="image/x-icon">
+    <!-- All CSS Stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/all-css-libraries.css') }}">
+    <!-- Core Stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  </head>
+  <body>
+    <!-- Modal -->
+    {% include 'modal.html' %}
+    <!-- Preloader-->
+    <div class="preloader" id="preloader">
+      <div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>
+    </div>
+    <!-- Header Wrapper -->
+    <header class="header-area dashboard-header px-0 px-sm-0">
+      <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+          <div class="d-flex align-items-center">
+            <!-- Brand Logo -->
+            <div class="admin-logo me-1 me-sm-3"><img src="img/core-img/dashboard-logo.png" alt=""></div>
+            <!-- Search Form -->
+            <div class="search-form position-relative d-flex align-items-center">
+              <input class="form-control" type="text" placeholder="Search">
+              <button class="position-absolute" type="submit"><i class="bi bi-search"></i></button>
+            </div>
+          </div>
+          <!-- Header Meta -->
+          <div class="header-meta d-flex align-items-center">
+            <!-- Menu Toggler -->
+            <div class="menu-toggler ms-2 ms-sm-3" id="dashboardMenuTrigger"><i class="bi bi-list"></i></div>
+            <!-- Button -->
+             <a class="btn btn-sm btn-danger rounded-pill ms-2 ms-sm-3 d-none d-sm-block " href="{{ url_for('home') }}" style="margin-right: 50px;"><i></i>Back</a>
+          </div>
+        </div>
+      </nav>
+    </header>
+    <!-- Admin Sidebar Wrap -->
+    <div class="admin-sidebar-wrap">
+      <div class="overflowY-scroll">
+        <!-- User Profile -->
+        <div class="user-profile">
+            <!-- User Name and Profile Picture -->
+            <div class="user-name mb-5">
+              <div class="d-flex align-items-center">
+                <!-- Profile Picture -->
+                <img src="../static/uploads/profile_pictures/{{ session['profile_picture'] }}" alt="Profile Picture" class="img-thumbnail rounded-pill" id="profilePic" data-bs-toggle="modal" data-bs-target="#profilePicModal" style="height: 65px; width: 70px;">
+                <div class="ms-3">
+                  <h6 class="lh-1 text-dark fz-18">
+                    {{ session['username'] if session.get('username') else 'Guest' }}
+                  </h6>
+                  <span class="badge bg-primary fz-12">Customer</span>
+                  </a>                  
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Modal for Upload Profile Picture -->
+          <div class="modal fade" id="profilePicModal" tabindex="-1" aria-labelledby="profilePicModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="profilePicModalLabel">Upload New Profile Picture</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <form action="/update_profile_picture" method="POST" enctype="multipart/form-data">
+                    <div class="mb-3">
+                      <label for="profilePicInput" class="form-label">Choose Image</label>
+                      <input type="file" class="form-control" id="profilePicInput" name="profile_picture" accept="image/*" required>
+                    </div>
+                    <button type="submit" class="btn btn-warning btn-sm rounded-pill">Upload</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        <!-- Sidenav -->
+        <div class="sidenav">
+          <ul>
+            <li>Menu</li>
+            <li><a href="{{url_for('transaction_history')}}"><i class="bi bi-clock-history"></i>Transaction History</a></li>
+            <li><a class="active" href="{{ url_for('settings') }}"><i class="bi bi-gear"></i>Settings</a></li>
+            <li><a href="{{ url_for('logout') }}"><i class="bi bi-box-arrow-right"></i>Logout</a></li>
+          </ul>
+        </div>
+        <div class="mt-auto">
+          <div class="mt-5"></div>
+          <!-- Mode Switching -->
+          <div class="dark-light-mode">
+            <input id="darkLightSwitch" type="checkbox">
+            <label class="shadow" for="darkLightSwitch">Toggle</label>
+          </div>
+          <div class="copywrite-text mt-4">
+            <p class="mb-0 fz-14">2024 &copy; All rights reserved by <a class="fz-14" href="settings.html#" target="_blank">Lienka</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="admin-wrapper">
+      <div class="container">
+        <div class="row g-4 justify-content-center">
+          <div class="col-12 col-lg-10 col-xl-9 col-xxl-8">
+            <ul class="nav nav-tabs border-0 mb-3" role="tablist">
+              <li class="nav-item"><a class="position-relative nav-link mb-0 rounded-pill border-0 me-1 active" id="tab--1" data-bs-toggle="tab" href="settings.html#tab1" role="tab" aria-controls="tab1" aria-selected="true">General</a></li>
+            </ul>
+            <div class="tab-content">
+            <!-- Tab Pane-->
+            <div class="tab-pane fade show active" id="tab1" role="tabpanel" aria-labelledby="tab--1">
+              <div class="card">
+                <div class="card-body p-4 p-sm-5">
+                  <form action="/settings" method="POST">
+                    <div class="row g-4">
+                      <!-- Full Name -->
+                      <div class="col-12">
+                        <label>Full Name</label>
+                        <input class="form-control bg-gray border-0" type="text" name="fullName"
+                          value="{{ session.get('fullname', '') }}" 
+                          required>
+                      </div>
+                    
+                      <!-- Email Address -->
+                      <div class="col-12">
+                        <label>Email Adress</label>
+                        <input class="form-control bg-gray border-0" type="email" name="email" 
+                          value="{{ session.get('email', '') }}" 
+                          required>
+                      </div>
+                    
+                      <!-- Username -->
+                      <div class="col-12">
+                        <label>Username</label>
+                        <input class="form-control bg-gray border-0" type="text" name="username" 
+                          value="{{ session.get('username', '') }}" 
+                          required>
+                      </div>
+                    
+                      <!-- Password -->
+                      <div class="col-12">
+                        <label>Password</label>
+                        <label class="label-psswd" for="registerPassword">Show</label>
+                        <input class="form-control bg-gray border-0" id="registerPassword" type="password" name="password" 
+                          value="{{ session.get('password', '') }}" 
+                          required>
+                      </div>
+                    
+                      <!-- Phone Number (Optional) -->
+                      <div class="col-12">
+                        <label>Phone Number</label>
+                        <input class="form-control bg-gray border-0" type="text" name="phone" 
+                          value="{{ session.get('phone', '') }}">
+                      </div>
+                    
+                      <!-- Address (Optional) -->
+                      <div class="col-12">
+                        <label>Adress</label>
+                        <textarea class="form-control bg-gray border-0" name="address">{{ session.get('address', '') }}</textarea>
+                      </div>
+                    
+                      <!-- Province (Optional) -->
+                      <div class="col-12">
+                        <label>Province</label>
+                        <select class="form-control bg-gray" name="province_id">
+                          <option value="" disabled selected>Select Province</option>
+                          {% for province in provinces %}
+                            <option value="{{ province.id }}" {% if session.get('province_id') == province.id or profile['province_id'] == province.id %}selected{% endif %}
+                            >{{ province.province }}</option>
+                          {% endfor %}
+                        </select>
+                      </div>
+                    
+                      <!-- City (Optional) -->
+                      <div class="col-12">
+                        <label>City</label>
+                        <input class="form-control bg-gray border-0" type="text" name="city" 
+                          value="{{ session.get('city', '') }}">
+                      </div>
+                    
+                      <!-- Postal Code (Optional) -->
+                      <div class="col-12">
+                        <label>Postal Code</label>
+                        <input class="form-control bg-gray border-0" type="text" name="postalCode" 
+                          value="{{ session.get('postalCode', '') }}" >
+                      </div>
+                    
+                      <!-- Save Changes Button -->
+                      <div class="col-12">
+                        <button class="btn btn-primary w-100 rounded-pill" type="submit">
+                          <i class="bi bi-sd-card-fill me-1"></i>Save changes
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- All JavaScript Files-->
+    <script src="{{ url_for('static', filename='js/all-js-libraries.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/active.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+  </body>
+</html>

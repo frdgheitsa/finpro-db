@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description">
+    <!-- Title-->
+    <title>Galaxy Solusindo (Gasol) | Toko Komputer Malang dan Surabaya</title>
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/logogasol.png') }}" type="image/x-icon">
+    <!-- All CSS Stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/all-css-libraries.css') }}">
+    <!-- Core Stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  </head>
+  <body>
+        <!-- Modal -->
+        {% include 'modal.html' %}
+        <!-- Preloader-->
+        <div class="preloader" id="preloader">
+            <div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>
+          </div>
+        <!-- Header -->
+
+    {% include 'navbar.html' %}
+    <!-- Breadcrumb -->
+    <div class="breadcrumb-wrapper">
+      <div class="container">
+        <div class="breadcrumb-content">
+          <h2 class="breadcrumb-title">Waranty Detail</h2>
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb justify-content-center">
+              <li class="breadcrumb-item"><a href="{{ url_for('home') }}">Home</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Waranty</li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <!-- Blog Details  -->
+    <div class="blog-details-wrap">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-10">
+            <div class="text-center">
+              <h1 class="display-5 fw-bold mb-4">Syarat & Ketentuan Garansi Service </h1>
+              <div class="post-date border border-2 border-info rounded px-2 py-1 d-inline-block fz-14">Ketentuan Garansi</div>
+            </div>
+            <div class="mb-5"></div>
+          </div>
+          <div class="col-12"><img class="mb-5" src="img/bg-img/44.jpg" alt="" data-action="zoom"></div>
+          <div class="col-10">
+            <h2 class="mb-3">Syarat Umum Garansi</h2>
+              <ul>
+                <li>Nota/Invoice pembelian</li>
+                <li>Segel garansi yang masih aktif (valid until)</li>
+                <li>Kelengkapan unit</li>
+                <li>SN produk harus sama dengan box</li>
+              </ul>
+
+            <h2 class="mb-3">Ketentuan umum Garansi Replace Unit</h2>
+              <ul>
+                <li>Untuk memberikan pelayanan spesial, kami memberlakukan garansi replace unit baru maksimal satu bulan setelah pembelian dengan syarat, jika tidak ada salah satu point Syarat Umum Garansi, proses garansi masuk service bukan replace</li>
+              </ul>
+
+            <h2 class="mb-3">Ketentuan Umum Layanan Perbaikan/Klaim garansi</h2>
+              <ul>
+                <li>Pemeriksaan kerusakan diperkirakan dalam waktu satu sampai dua hari waktu kerja </li>
+                <li>Cover garansi service toko ke distributor satu tahun pertama, selebihnya bisa langsung klaim ke distributor/service center resmi. </li>
+                <li>Proses lama garansi service ke distributor/service center resmi sepenuhnya proses pada pihak service center, pihak toko hanya memfasilitasi proses claim </li>
+                <li>Klaim garansi ke distributor lebih dari satu tahun, proses melalui toko bisa di bantu dengan catatan, di kenakan biaya admin/biaya kirim besaran 150-200ribu (untuk product komponen/ups atau stavolt) </li>
+              </ul>
+
+            <h2 class="mb-3">Batasan Garansi/VOID garansi</h2>
+              <ul>
+                <li>Garansi tidak berlaku untuk produk-produk yang habis terpakai misalnya tinta, disk, baterai, aksesoris dan lain sebagainya.</li>
+              <li>Garansi tidak berlaku apabila pembeli dengan sengaja/tidak sengaja merusak segel garansi yang tertempel pada setiap produk yang dibeli. Garansi juga tidak berlaku untuk kejadian-kejadian berikut ini:
+                <ol>
+                  <li>Kerusakan akibat bencana alam (gempa, kebakaran, banjir, petir, dll)</li>
+                  <li>Huru hara, gigitan atau tindakan-tindakan binatang</li>
+                  <li>Tegangan listrik yang tidak stabil</li>
+                  <li>Kesalahan atau kelalaian pemakai (jatuh, terkena air/cairan kimia dll)</li>
+                  <li>Pengurangan atau penambahan peralatan aksesoris lain tanpa sepengetahuan kami</li>
+                  <li>Telah diperbaiki atau dibongkar personil yang bukan staff kami</li>
+                  <li>Merubah atau memodifikasi peralatan yang ditanggung</li>
+                  <li>Transportasi atau instalasi ulang yang salah</li>
+                  <li>Kerusakan akibat dihubungkan dengan peralatan lain baik secara mekanis maupun secara elektronis</li>
+                  <li>Software terkena serangan virus</li>
+                  <li>Kesalahan instalasi software</li>
+                  <li>Disk drive dan sejenisnya yang terganggu karena kotor</li>
+                  <li>Pemakaian tidak layak pakai (kotor/rusak/tergores/berjamur dll)</li>
+                  <li>LCD dengan dead pixel, stuck pixel, atau screen bleeding yang tidak dicover garansi oleh manufaktur</li>
+              </ol>
+              </li>
+              </ul>
+        </div>
+
+      </div>
+    </div>
+    <!-- Footer -->
+    {% include 'footer.html' %}
+    <!-- Scroll To Top -->
+    <div id="scrollTopButton"><i class="bi bi-arrow-up-short"></i></div>
+    <!-- All JavaScript Files-->
+    <script src="{{ url_for('static', filename='js/all-js-libraries.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/active.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+  </body>
+</html>

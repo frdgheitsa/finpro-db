@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Funto - HTML NFT Marketplace">
+    <!-- Title-->
+    <title>Galaxy Solusindo (Gasol) | Toko Komputer Malang dan Surabaya</title>
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/logogasol.png') }}" type="image/x-icon">
+    <!-- All CSS Stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/all-css-libraries.css') }}">
+    <!-- Core Stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  </head>
+  <body>
+    <!-- Modal -->
+    {% include 'modal.html' %}
+    <!-- Preloader-->
+    <div class="preloader" id="preloader">
+      <div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>
+    </div>
+    <!-- Header Wrapper -->
+    <header class="header-area dashboard-header px-0 px-sm-0">
+      <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+          <div class="d-flex align-items-center">
+            <!-- Brand Logo -->
+            <div class="navbar-brand me-2">
+              <img class="light-logo" src="{{ url_for('static', filename='img/gasol-img-light.png') }}" style="height: 50px">
+              <img class="dark-logo" src="{{ url_for('static', filename='img/gasol-img-dark.png') }}" style="height: 50px">
+            </div>
+          </div>
+          <!-- Header Meta -->
+          <div class="header-meta d-flex align-items-center">
+            <!-- Menu Toggler -->
+            <div class="menu-toggler ms-2 ms-sm-3" id="dashboardMenuTrigger"><i class="bi bi-list"></i></div>
+            <!-- Button --><a class="btn btn-sm btn-danger rounded-pill ms-2 ms-sm-3 d-none d-sm-block" href="{{url_for('home')}}"><i></i>Baack</a>
+          </div>
+        </div>
+      </nav>
+    </header>
+    <!-- Admin Sidebar Wrap -->
+    <div class="admin-sidebar-wrap">
+      <div class="overflowY-scroll">
+        <!-- User Profile -->
+        <div class="user-profile">
+          <!-- User Name -->
+          <div class="user-name mb-5">
+            <div class="d-flex align-items-center"><img src="{{ url_for('static', filename='img/bg-img/u2.jpg') }}" class="img-thumbnail rounded-pill">
+              <div class="ms-3">
+                <h6 class="lh-1 text-dark fz-18">
+                  {{ session.get('username', '') }}
+              </h6>
+              {% if session.get('role') == 'owner'%}
+              <span class="badge bg-primary fz-12">Owner</span>
+              {% elif session.get('role') == 'admin'%}
+              <span class="badge bg-primary fz-12">Admin</span>
+              {% elif session.get('role') == 'employee'%}
+              <span class="badge bg-primary fz-12">Employee</span>
+              {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Sidenav -->
+        <div class="sidenav">
+          <ul>
+            <li>Menu</li>
+            {% if product_updates%}
+            {% if session.get('role') == 'owner'%}
+            <li><a href="{{url_for('admin')}}"><i class="bi bi-speedometer"></i>Dashboard</a></li>
+            {% endif %}
+            <li><a href="{{url_for('add_product_form')}}"><i class="bi bi-plus-square"></i>Add Product</a></li>
+            <li><a class="active" href="{{ url_for('manage_products', page=1, category=0, query='') }}"><i class="bi bi-list-task"></i>List Product</a></li>
+            {% if session.get('role') == 'owner' or session.get('role') == 'admin'%}
+            <li><a href="{{ url_for('order_data', page=1) }}"><i class="bi bi-clipboard-data-fill"></i>Ordered Data</a></li>
+            {% endif %}
+            <li><a href="{{ url_for('logout') }}"><i class="bi bi-box-arrow-right"></i>Logout</a></li>
+            {% else %}
+            {% if session.get('role') == 'owner'%}
+            <li><a href="{{url_for('admin')}}"><i class="bi bi-speedometer"></i>Dashboard</a></li>
+            {% endif %}
+            <li><a class="active" href="{{url_for('add_product_form')}}"><i class="bi bi-plus-square"></i>Add Product</a></li>
+            <li><a href="{{ url_for('manage_products', page=1, category=0, query='') }}"><i class="bi bi-list-task"></i>List Product</a></li>
+            {% if session.get('role') == 'owner' or session.get('role') == 'admin'%}
+            <li><a href="{{ url_for('order_data', page=1) }}"><i class="bi bi-clipboard-data-fill"></i>Ordered Data</a></li>
+            {% endif %}
+            <li><a href="{{ url_for('logout') }}"><i class="bi bi-box-arrow-right"></i>Logout</a></li>
+            {% endif %}
+          </ul>
+        </div>
+        <div class="mt-auto">
+          <div class="mt-5"></div>
+          <!-- Mode Switching -->
+          <div class="dark-light-mode">
+            <input id="darkLightSwitch" type="checkbox">
+            <label class="shadow" for="darkLightSwitch">Toggle</label>
+          </div>
+          <div class="copywrite-text mt-4">
+            <p class="mb-0 fz-14">2024 &copy; All rights reserved by <a class="fz-14" href="settings.html#" target="_blank">Lienka</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="admin-wrapper">
+      <div class="container">
+        <div class="row g-4 justify-content-center">
+          <div class="col-12 col-lg-10 col-xl-9 col-xxl-8">
+              {% if product_updates %}
+              <ul class="nav nav-tabs border-0 mb-3" role="tablist">
+                <li class="nav-item"><a class="position-relative nav-link mb-0 rounded-pill border-0 me-1 active" id="tab--1" data-bs-toggle="tab" role="tab" aria-controls="tab1" aria-selected="true">Update Product</a></li>
+                </ul>
+              <div class="tab-content">
+                <!-- Tab Pane-->
+                <div class="tab-pane fade show active" id="tab1" role="tabpanel" aria-labelledby="tab--1">
+                  <div class="card">
+                    <div class="card-body p-4 p-sm-5">
+                      <form action="{{ url_for('update_product', product_id=product_updates['product_id'], page=current_page, selected_category=selected_category, search_query=search_query) }}" method="POST" enctype="multipart/form-data">
+                        <div class="row g-4">
+                          <div class="col-12">
+                            <label for="name" class="form-label">Product Name</label>
+                            <input class="form-control bg-gray border-0" type="text" id="name" name="name" value="{{product_updates['name']}}" placeholder="Product Name" required>
+                          </div>
+                          <div class="col-12">
+                            <label for="description" class="form-label">Product Description</label>
+                            <textarea class="form-control bg-gray border-0" id="description" name="description" placeholder="Product Description" required>{{product_updates['description']}}</textarea>
+                          </div>
+                          <div class="col-12">
+                            <label for="specification" class="form-label">Product Specification</label>
+                            <textarea class="form-control bg-gray border-0" id="specification" name="specification" placeholder="Product Specification" required>{{product_updates['specifications']}}</textarea>
+                          </div>
+                          <div class="col-12">
+                            <label for="price_buy" class="form-label">Product Purchase Price</label>
+                            <input class="form-control bg-gray border-0" type="number" id="price_buy" name="price_buy" value="{{product_updates['price_buy']}}" placeholder="Product Purchase Price" required>
+                          </div>
+                          <div class="col-12">
+                            <label for="price_sell" class="form-label">Product Selling Price</label>
+                            <input class="form-control bg-gray border-0" type="number" id="price_sell" name="price_sell" value="{{product_updates['price_sell']}}" placeholder="Product Selling Price" required>
+                          </div>
+                          <div class="col-12">
+                            <label for="stock" class="form-label">Product Stock</label>
+                            <input class="form-control bg-gray border-0" type="number" id="stock" name="stock" value="{{product_updates['stock']}}" placeholder="Product Stock" required>
+                          </div>
+                          <div class="col-12">
+                            <label for="category_id" class="form-label">Product Category</label>
+                            <select class="form-control bg-gray border-0" id="category_id" name="category_id" required>
+                              <option value="{{product_updates['category_id']}}">{{product_updates['category_name']}}</option>
+                              {% for category in categories %}
+                              <option value="{{ category['category_id'] }}">{{ category['category_name'] }}</option>
+                              {% endfor %}
+                            </select>
+                          </div>
+                          <div class="row align-items-center mt-2">
+                            <!-- Kolom untuk gambar -->
+                            <div class="col-3">
+                              <label for="image-preview" class="form-label">Current Image</label>
+                              <img id="image-preview" src="{{ url_for('static', filename='uploads/product_img/' + product_updates['image']) }}" alt="Product Image" style="max-width: 100px; height: auto; object-fit: contain;">
+                            </div>
+                            <!-- Kolom untuk form input file -->
+                            <div class="col-9">
+                              <label for="image" class="form-label">Update Image</label>
+                              <input class="form-control bg-gray border-0" type="file" id="image" name="image">
+                            </div>
+                          </div>
+                          <div class="col-12">
+                            <button class="btn btn-primary w-100 rounded-pill" type="submit"><i class="bi bi-plus-lg me-1"></i>Update Product</button>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+                
+              </div>
+              {% else %}
+              <ul class="nav nav-tabs border-0 mb-3" role="tablist">
+                <li class="nav-item"><a class="position-relative nav-link mb-0 rounded-pill border-0 me-1 active" id="tab--1" data-bs-toggle="tab" role="tab" aria-controls="tab1" aria-selected="true">Add Product</a></li>
+                </ul>
+              <div class="tab-content">
+                <!-- Tab Pane-->
+                <div class="tab-pane fade show active" id="tab1" role="tabpanel" aria-labelledby="tab--1">
+                  <div class="card">
+                    <div class="card-body p-4 p-sm-5">
+                      <form action="{{ url_for('add_product') }}" method="POST" enctype="multipart/form-data">
+                        <div class="row g-4">
+                            <div class="col-12">
+                                <input class="form-control bg-gray border-0" type="text" name="name" placeholder="Product Name" required>
+                            </div>
+                            <div class="col-12">
+                                <textarea class="form-control bg-gray border-0" name="description" placeholder="Product Description" required></textarea>
+                            </div>
+                            <div class="col-12">
+                              <textarea class="form-control bg-gray border-0" name="specification" placeholder="Product Specification" required></textarea>
+                          </div>
+                            <div class="col-12">
+                              <input class="form-control bg-gray border-0" type="number" name="price_buy" placeholder="Product Price Buy" required>
+                          </div>
+                            <div class="col-12">
+                                <input class="form-control bg-gray border-0" type="number" name="price_sell" placeholder="Product Price Sell" required>
+                            </div>
+                            <div class="col-12">
+                                <input class="form-control bg-gray border-0" type="number" name="stock" placeholder="Product Stock" required>
+                            </div>
+                            <div class="col-12">
+                                <select class="form-control bg-gray border-0" name="category_id" id="category_id" required>
+                                    <option value="">Select Category</option>
+                                    {% for category in categories %}
+                                        <option value="{{ category['category_id'] }}">{{ category['category_name'] }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <input class="form-control bg-gray border-0" type="file" name="image" required>
+                            </div>
+                            <div class="col-12">
+                                <button class="btn btn-primary w-100 rounded-pill" type="submit"><i class="bi bi-plus-lg me-1"></i>Update Product</button>
+                            </div>
+                        </div>
+                    </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- All JavaScript Files-->
+    <script src="{{ url_for('static', filename='js/all-js-libraries.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/active.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+  </body>
+</html>
+

@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Title-->
+    <title>Galaxy Solusindo (Gasol) | Toko Komputer Malang dan Surabaya</title>
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/logogasol.png') }}" type="image/x-icon">
+    <!-- All CSS Stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/all-css-libraries.css') }}">
+    <!-- Core Stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
+
+<body>
+    <!-- Modal -->
+    {% include 'modal.html' %}
+    <!-- Preloader-->
+    <div class="preloader" id="preloader">
+      <div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>
+    </div>
+    <!-- Header Area-->
+    {% include 'navbar.html' %}
+    <!-- Breadcrumb -->
+    <div class="breadcrumb-wrapper">
+        <div class="container">
+            <div class="breadcrumb-content">
+                <h2 class="breadcrumb-title">Product Details</h2>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center">
+                        <li class="breadcrumb-item"><a href="{{url_for('home')}}">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Product Details</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <div class="divider"></div>
+    <!-- Share Modal -->
+    <div class="share-modal modal fade" id="shareModal" tabindex="-1" aria-labelledby="shareModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body p-4 text-center">
+                    <h4 class="mb-4" id="shareModalLabel">Share this item</h4>
+                    <div class="d-flex align-items-center justify-content-center"><a class="mx-2" href="item-details.html#"><img src="img/core-img/icons8-facebook.svg" alt=""></a><a class="mx-2" href="item-details.html#"><img src="img/core-img/icons8-twitter.svg" alt=""></a><a class="mx-2" href="item-details.html#"><img src="img/core-img/icons8-instagram.svg" alt=""></a><a class="mx-2" href="item-details.html#"><img src="img/core-img/icons8-slack.svg" alt=""></a><a class="mx-2" href="item-details.html#"><img src="img/core-img/icons8-player.svg" alt=""></a></div>
+                    <button class="btn btn-danger btn-sm rounded-pill mt-4" type="button" data-bs-dismiss="modal" aria-label="Close"><i class="me-1 bi bi-x-lg"></i>Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Copy Link Modal -->
+    <div class="share-modal modal fade" id="copylinkModal" tabindex="-1" aria-labelledby="copylinkLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body p-4 text-center">
+                    <h4 class="mb-4" id="copylinkLabel">Copy item link</h4>
+                    <p class="user-select-all mb-0 border border-2 p-3 rounded">https://themeforest.net/item/affan-pwa-mobile-html-template/29715548</p>
+                    <button class="btn btn-danger btn-sm rounded-pill mt-4" type="button" data-bs-dismiss="modal" aria-label="Close"><i class="me-1 bi bi-x-lg"></i>Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Report Modal -->
+    <div class="share-modal modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body p-4 text-center">
+                    <h4 class="mb-4" id="reportModalLabel">Why are you reporting?</h4>
+                    <form action="item-details.html#">
+                        <textarea class="form-control mb-3" id="reportText" name="reportMessage" placeholder="Write your complaint..."></textarea>
+                        <div class="d-flex align-items-center justify-content-between">
+                            <button class="btn btn-danger btn-sm rounded-pill" type="button" data-bs-dismiss="modal" aria-label="Close"><i class="me-1 bi bi-x-lg"></i>Close</button>
+                            <button class="btn btn-primary btn-sm rounded-pill" type="submit">Report</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Item Details -->
+    <div class="item-details-wrap">
+        <div class="container">
+            <div class="row g-4 g-lg-5 justify-content-center">
+                <div class="col-12 col-md-12 col-lg-6">
+                    <div class="item-big-thumb"><img src="{{ url_for('static', filename='uploads/product_img/' + product['image']) }}" alt="" data-action="zoom"></div>
+                </div>
+                <!-- Item Details Content -->
+                <div class="col-12 col-md-9 col-lg-6">
+                    <div class="item-details-content mt-5 mt-lg-0">
+                        <div class="dropdown item-details-dd">
+                            <button class="dropdown-toggle" id="dwd987" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-three-dots-vertical"></i></button>
+                            <!-- Dropdown Menu -->
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dwd987">
+                                <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#shareModal"><i class="me-1 bi bi-share"></i>Share</a></li>
+                                <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#copylinkModal"><i class="me-1 bi bi-box-arrow-up-right"></i>Copy Link</a></li>
+                                <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#reportModal"><i class="me-1 bi bi-flag"></i>Report</a></li>
+                            </ul>
+                        </div>
+                        <div class="d-flex flex-wrap align-items-center">
+                            <!-- Badge-->
+                            <div class="badge border px-3 py-2 rounded-pill text-dark fz-14 d-inline-block "><i class="me-1 bi bi-eye"></i>{{ view_count }} People See This Product</div>
+                        </div>
+                        <h2 class="my-3">{{product['name']}}</h2>
+                        <div class="d-flex align-items-center mb-4">
+                            <div class="name-author"><span class="d-block">Stock</span><a class="author d-block fz-16 hover-primary text-truncate">{{product['stock']}} units</a></div>
+                        </div>
+                        <div class="border-top w-75 my-4"></div>
+                        <div class="short-description" style="min-height: 180px;">
+                            <h5>Short Description</h5>
+                            <p class="mb-0">{{product['description']}}</p>
+                        </div>
+                    </div>
+                    <div class="border-top w-75 my-4"></div>
+                    <div class="row align-items-end">
+                        <div class="col-6 col-sm-6">
+                            <h2 class="text-primary w-100">{{product['price_sell'] | rupiah }}</h2>
+                        </div>
+                    </div>
+                    <div class="row align-items-center">
+                        <div class="col-6 col-sm-8">
+                            <div class="d-flex justify-content-between">
+                                <!-- Add to Cart Button -->
+                                {% if session.get('role') == 'customer' %}
+                                    <form action="{{ url_for('add_to_cart', product_id=product['product_id']) }}" method="POST" class="w-48">
+                                        <input type="hidden" name="product_id" value="{{ product['product_id'] }}">
+                                        <button type="submit" class="btn btn-success rounded-pill w-100">
+                                            <h5 class="m-0">Add to Cart</h5>
+                                        </button>
+                                    </form>
+                                {% else %}
+                                    <p>Anda tidak memiliki akses untuk menambahkan produk ke keranjang.</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Reviews Section -->
+                    <div class="border-top w-75 my-4"></div>
+                    <div class="reviews-section mt-4">
+                        <h5>Reviews</h5>
+                        <ul class="list-group">
+                            {% for review in reviews %}
+                                <li class="list-group-item">
+                                    <div>
+                                        <strong>{{ review['username'] }}</strong>
+                                        <span class="text-muted review"> - Rating: {{ review['rating'] }}/5</span>
+                                    </div>
+                                    <p class="review">{{ review['review'] }}</p>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                        {% if reviews|length == 0 %}
+                            <p>Belum ada ulasan untuk produk ini.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-block w-100 mb-70"></div>
+    <div class="funto-tab-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="tab--area bg-gray p-4 p-lg-5">
+                        <ul class="nav nav-tabs" id="funtoTab" role="tablist">
+                            <li class="nav-item"><a class="nav-link rounded-pill bg-gradient active" id="tab--1" data-bs-toggle="tab" href="item-details.html#tab1" role="tab" aria-controls="tab1" aria-selected="true">Spesifications</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <!-- Tab Pane-->
+                            <div class="tab-pane fade show active" id="tab1" role="tabpanel" aria-labelledby="tab--1">
+                                <div class="card border-0">
+                                    <div class="card-body p-4">
+                                        <h4>{{product['name']}} Specifications</h4>
+                                        <div class="row specification" id="specifications">
+                                            {{ product['specifications'] }}
+                                        </div>                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="divider"></div>
+    <!-- Related Project  -->
+    <div class="related-project-area">
+        <div class="container">
+            <div class="section-heading">
+                <h2 class="mb-0">Other Products</h2>
+                <p class="mb-0">You might interest</p>
+            </div>
+            <!-- Slide -->
+            <div class="related-project-slide">
+                {% for other_product in other_products %}
+                <div>
+                    <div class="nft-card card shadow-sm">
+                        <div class="card-body">
+                            <div class="img-wrap">
+                                <img src="{{url_for('static', filename='uploads/product_img/' + other_product.image)}}" alt="{{ other_product.name }}" style="height: 250px">
+                            </div>
+                            <div class="row gx-2 align-items-center mt-3">
+                                <div class="col-6"><span class="d-block fz-12"><i class="bi bi-bag me-1"></i>Available {{ other_product.stock }} units</span></div>
+                                <div class="col-6 text-end">
+                                    <button class="wishlist-btn" type="button"><i class="bi"></i></button>
+                                </div>
+                            </div>
+                            <div class="row gx-2 align-items-center mt-2">
+                                    <div class="name-author">
+                                        <h5 class="name d-block hover-primary fw-bold text-truncate" href="item-details.html" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ other_product.name }}">{{ other_product.name }}</h5>
+                                    </div>
+                                    <div class="price">
+                                        <h6 class="mb-0">{{ other_product.price_sell | rupiah }}</h6>
+                                    </div>
+                            </div>
+                            <div class="row gx-2 align-items-center mt-3">
+                                <div>
+                                    <a class="btn btn-primary btn-sm rounded-pill" href="{{ url_for('detail_product', product_id=other_product['product_id']) }}">Unit Details</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <p>No products available in this category.</p>
+            {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="divider"></div>
+
+    {% include 'footer.html' %}
+    <!-- Scroll To Top -->
+    <div id="scrollTopButton"><i class="bi bi-arrow-up-short"></i></div>
+    <!-- All JavaScript Files-->
+    <script>
+        window.onload = function() {
+            var specificationsDiv = document.getElementById('specifications');
+            var text = specificationsDiv.innerHTML;
+            
+            // Replace newline characters with <br> tags
+            text = text.replace(/\n/g, '<br>');
+            
+            // Update the innerHTML with new content
+            specificationsDiv.innerHTML = text;
+        };
+    </script>
+    
+    <script src="{{ url_for('static', filename='js/all-js-libraries.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/active.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+</body>
+
+</html>
